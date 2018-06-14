@@ -1,0 +1,29 @@
+cmake_minimum_required (VERSION 2.6)
+
+project(elevatesppcomapi)
+add_definitions(-DUNICODE -D_UNICODE -D_CRT_SECURE_NO_WARNINGS)
+enable_language(ASM_MASM)
+
+set(CompilerFlags
+        CMAKE_CXX_FLAGS
+        CMAKE_CXX_FLAGS_DEBUG
+        CMAKE_CXX_FLAGS_RELEASE
+        CMAKE_C_FLAGS
+        CMAKE_C_FLAGS_DEBUG
+        CMAKE_C_FLAGS_RELEASE
+        )
+foreach(CompilerFlag ${CompilerFlags})
+  string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+endforeach()
+
+string(REPLACE "/pdb:<TARGET_PDB>" "" CMAKE_C_LINK_EXECUTABLE ${CMAKE_C_LINK_EXECUTABLE})
+string(REPLACE "/pdb:<TARGET_PDB>" "" CMAKE_CXX_LINK_EXECUTABLE ${CMAKE_CXX_LINK_EXECUTABLE})
+
+add_executable(elevatesppcomapi inject.c rsrc.rc)
+target_link_libraries(elevatesppcomapi ntdll.lib)        
+
+add_library(elevatesppcomapidll SHARED main.c exports.def)
+target_link_libraries(elevatesppcomapidll ntdll.lib)
+
+add_dependencies(elevatesppcomapi elevatesppcomapidll)
+
