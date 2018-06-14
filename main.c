@@ -41,15 +41,15 @@ BOOL    SetRegistryValue(
         bsRegistryPath = SysAllocString(wsRegistryPath);
         bsValueName    = SysAllocString(wsValueName);
         
-        if (osver.dwMajorVersion == 10)
-                hr = pSLLUAComInstance->lpVtbl->SLLUARegKeySetValue(pSLLUAComInstance,
+        if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 1)
+                hr = pSLLUAComInstanceWin7->lpVtbl->SLLUARegKeySetValue(pSLLUAComInstanceWin7,
                                                                     SSLUA_HKEY_LOCAL_MACHINE,
                                                                     bsRegistryPath,
                                                                     bsValueName,
                                                                     safeArray,
                                                                     dwType);
         else
-                hr = pSLLUAComInstanceWin7->lpVtbl->SLLUARegKeySetValue(pSLLUAComInstanceWin7,
+                hr = pSLLUAComInstance->lpVtbl->SLLUARegKeySetValue(pSLLUAComInstance,
                                                                     SSLUA_HKEY_LOCAL_MACHINE,
                                                                     bsRegistryPath,
                                                                     bsValueName,
