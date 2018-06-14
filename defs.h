@@ -18,4 +18,9 @@ DEFINE_GUID(IID_ISPPLUA,
         if (x){                         \
                 x->lpVtbl->Release(x);  \
                 x = NULL;               \
-        } 
+        }
+
+NTSYSAPI NTSTATUS RtlGetVersion(
+  PRTL_OSVERSIONINFOW lpVersionInformation
+);
+ 

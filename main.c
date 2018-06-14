@@ -14,7 +14,13 @@ BOOL    SetRegistryValue(
         PVOID           lpBuffer;
         SSLUA_ROOTKEY   luaRootKey;
         HRESULT         hr;
-     
+        ISLLUAComInstanceWin7   *pSLLUAComInstanceWin7 = (ISLLUAComInstanceWin7 *)pSLLUAComInstance;
+        
+        RTL_OSVERSIONINFOEXW    osver;
+        
+        osver.dwOSVersionInfoSize = sizeof(osver);
+        RtlGetVersion((PRTL_OSVERSIONINFOW)&osver);
+        
         if (hKey == HKEY_CLASSES_ROOT){
                 luaRootKey = SSLUA_HKEY_CLASSES_ROOT;
         }else if (hKey == HKEY_CURRENT_CONFIG){
@@ -35,13 +41,20 @@ BOOL    SetRegistryValue(
         bsRegistryPath = SysAllocString(wsRegistryPath);
         bsValueName    = SysAllocString(wsValueName);
         
-        hr = pSLLUAComInstance->lpVtbl->SLLUARegKeySetValue(pSLLUAComInstance,
-                                                            SSLUA_HKEY_LOCAL_MACHINE,
-                                                            bsRegistryPath,
-                                                            bsValueName,
-                                                            safeArray,
-                                                            dwType);
-        
+        if (osver.dwMajorVersion == 10)
+                hr = pSLLUAComInstance->lpVtbl->SLLUARegKeySetValue(pSLLUAComInstance,
+                                                                    SSLUA_HKEY_LOCAL_MACHINE,
+                                                                    bsRegistryPath,
+                                                                    bsValueName,
+                                                                    safeArray,
+                                                                    dwType);
+        else
+                hr = pSLLUAComInstanceWin7->lpVtbl->SLLUARegKeySetValue(pSLLUAComInstanceWin7,
+                                                                    SSLUA_HKEY_LOCAL_MACHINE,
+                                                                    bsRegistryPath,
+                                                                    bsValueName,
+                                                                    safeArray,
+                                                                    dwType);
         
         SysFreeString(bsRegistryPath);
         SysFreeString(bsValueName);
