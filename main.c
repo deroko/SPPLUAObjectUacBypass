@@ -43,14 +43,14 @@ BOOL    SetRegistryValue(
         
         if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 1)
                 hr = pSLLUAComInstanceWin7->lpVtbl->SLLUARegKeySetValue(pSLLUAComInstanceWin7,
-                                                                    SSLUA_HKEY_LOCAL_MACHINE,
+                                                                    luaRootKey,
                                                                     bsRegistryPath,
                                                                     bsValueName,
                                                                     safeArray,
                                                                     dwType);
         else
                 hr = pSLLUAComInstance->lpVtbl->SLLUARegKeySetValue(pSLLUAComInstance,
-                                                                    SSLUA_HKEY_LOCAL_MACHINE,
+                                                                    luaRootKey,
                                                                     bsRegistryPath,
                                                                     bsValueName,
                                                                     safeArray,
